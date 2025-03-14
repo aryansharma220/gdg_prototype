@@ -1,0 +1,339 @@
+"use client"
+
+import Link from "next/link"
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { ArrowRight, BookOpen, Brain, Layers, Lightbulb, Sparkles, UserCheck } from "lucide-react"
+import { useTheme } from "next-themes"
+import { Navbar } from "@/components/navbar"
+
+export default function LandingPage() {
+  const { theme, setTheme } = useTheme()
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1
+    }
+  }
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      <div className="pt-16"> {/* Add padding-top to account for fixed navbar */}
+        {/* Hero Section */}
+        <motion.section 
+          initial={{ opacity: 0 }} 
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="relative bg-gradient-to-b from-violet-50 to-white dark:from-slate-950 dark:to-slate-900 py-20 md:py-28"
+        >
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-300 dark:bg-purple-900 rounded-full opacity-20 blur-3xl"></div>
+            <div className="absolute top-60 -left-20 w-60 h-60 bg-blue-300 dark:bg-blue-900 rounded-full opacity-20 blur-3xl"></div>
+          </div>
+
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="container mx-auto px-4 relative z-10"
+          >
+            <div className="flex flex-col lg:flex-row items-center gap-12">
+              <motion.div 
+                variants={itemVariants}
+                className="flex-1 space-y-6 text-center lg:text-left"
+              >
+                <div className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-sm font-medium mb-2">
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Powered by Google Gemini API
+                </div>
+
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 dark:text-white">
+                  Learn Anything with <span className="text-purple-600 dark:text-purple-400">AI-Generated</span> Courses
+                </h1>
+
+                <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0">
+                  Create personalized, interactive courses on any topic with our Gemini-powered platform. Learn at your
+                  own pace with adaptive content that evolves as you progress.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Link href="/create">
+                      <Button size="lg" className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white">
+                        Create Your Course
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </motion.div>
+                  <Link href="/explore">
+                    <Button size="lg" variant="outline" className="w-full sm:w-auto">
+                      Explore Examples
+                    </Button>
+                  </Link>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                variants={itemVariants}
+                className="flex-1 relative"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <div className="relative w-full aspect-square max-w-md mx-auto">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-2xl blur-xl"></div>
+                  <div className="relative bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+                    <div className="p-6">
+                      <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center space-x-2">
+                          <div className="h-10 w-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                            <Brain className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">Machine Learning Fundamentals</h3>
+                            <p className="text-sm text-slate-500 dark:text-slate-400">Generated by Gemini</p>
+                          </div>
+                        </div>
+                        <div className="text-sm font-medium text-purple-600 dark:text-purple-400">Module 2/5</div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <h4 className="font-medium">Neural Networks: The Building Blocks</h4>
+                          <p className="text-sm text-slate-600 dark:text-slate-300">
+                            Neural networks are computational models inspired by the human brain. They consist of layers
+                            of interconnected nodes or "neurons" that process information.
+                          </p>
+                        </div>
+
+                        <div className="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-lg">
+                          <div className="flex items-center mb-2">
+                            <Lightbulb className="h-4 w-4 text-amber-500 mr-2" />
+                            <span className="text-sm font-medium">Key Concept</span>
+                          </div>
+                          <p className="text-sm">
+                            Each neuron applies a weighted sum to its inputs, followed by an activation function.
+                          </p>
+                        </div>
+
+                        <div className="border-t pt-4 mt-6">
+                          <div className="flex justify-between">
+                            <Button variant="outline" size="sm">
+                              Previous Section
+                            </Button>
+                            <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
+                              Next Section
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl opacity-20 blur-2xl"></div>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        </motion.section>
+
+        {/* Features Section */}
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="py-20 bg-white dark:bg-slate-900"
+        >
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
+                Revolutionize Your Learning Experience
+              </h2>
+              <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+                Our AI-powered platform delivers personalized, interactive courses that adapt to your learning style and
+                pace.
+              </p>
+            </div>
+
+            <motion.div 
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              {features.map((feature, index) => (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.05 }}
+                  className="bg-slate-50 dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 transition-all hover:shadow-lg"
+                >
+                  <div className="w-12 h-12 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mb-4">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-slate-900 dark:text-white">{feature.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-300">{feature.description}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </motion.section>
+
+        {/* How It Works Section */}
+        <section className="py-20 bg-slate-50 dark:bg-slate-800/50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900 dark:text-white">How It Works</h2>
+              <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+                Create and learn from AI-generated courses in just a few simple steps
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              {steps.map((step, index) => (
+                <div key={index} className="text-center">
+                  <div className="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mx-auto mb-4 relative">
+                    <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">{index + 1}</span>
+                    {index < steps.length - 1 && (
+                      <div
+                        className="absolute left-full top-1/2 w-full h-0.5 bg-purple-200 dark:bg-purple-800 -translate-y-1/2 hidden md:block"
+                        style={{ width: "calc(100% - 4rem)" }}
+                      ></div>
+                    )}
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-slate-900 dark:text-white">{step.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-300">{step.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-20 bg-gradient-to-br from-purple-600 to-blue-600 text-white">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Learning?</h2>
+            <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+              Join thousands of learners who are already using our AI-powered courses to master new skills.
+            </p>
+            <Link href="/create">
+              <Button size="lg" className="bg-white text-purple-600 hover:bg-slate-100">
+                Get Started for Free
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+        </section>
+
+        {/* Footer with theme toggle */}
+        <footer className="bg-slate-900 text-slate-300 py-12">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <div className="mb-6 md:mb-0">
+                <div className="flex items-center">
+                  <BookOpen className="h-6 w-6 text-purple-400 mr-2" />
+                  <span className="text-xl font-bold text-white">CourseGemini</span>
+                </div>
+                <p className="mt-2 text-sm text-slate-400">Powered by Google Gemini API</p>
+              </div>
+              <div className="flex gap-6 items-center">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className="text-slate-300 hover:text-white"
+                >
+                  {theme === "dark" ? "🌞" : "🌙"}
+                </Button>
+                <Link href="/about" className="hover:text-white transition-colors">
+                  About
+                </Link>
+                <Link href="/privacy" className="hover:text-white transition-colors">
+                  Privacy
+                </Link>
+                <Link href="/terms" className="hover:text-white transition-colors">
+                  Terms
+                </Link>
+                <Link href="/contact" className="hover:text-white transition-colors">
+                  Contact
+                </Link>
+              </div>
+            </div>
+            <div className="border-t border-slate-800 mt-8 pt-8 text-center text-sm text-slate-500">
+              © {new Date().getFullYear()} CourseGemini. All rights reserved.
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+  )
+}
+
+const features = [
+  {
+    title: "Dynamic Content Generation",
+    description:
+      "Our AI creates detailed, accurate content on any topic using Google's Gemini API, delivering it section-by-section as you progress.",
+    icon: <Layers className="h-6 w-6 text-purple-600 dark:text-purple-400" />,
+  },
+  {
+    title: "Interactive Teaching Mode",
+    description:
+      "Experience an AI instructor that adapts to your questions and provides personalized explanations with text, images, and diagrams.",
+    icon: <Brain className="h-6 w-6 text-purple-600 dark:text-purple-400" />,
+  },
+  {
+    title: "Adaptive Learning Path",
+    description:
+      "Courses adjust in real-time based on your progress, prior knowledge, and learning pace for an optimized learning experience.",
+    icon: <UserCheck className="h-6 w-6 text-purple-600 dark:text-purple-400" />,
+  },
+  {
+    title: "Multimodal Content",
+    description:
+      "Learn through text, images, diagrams, and code snippets generated by Gemini's advanced multimodal capabilities.",
+    icon: <Sparkles className="h-6 w-6 text-purple-600 dark:text-purple-400" />,
+  },
+  {
+    title: "Interactive Assessments",
+    description:
+      "Test your knowledge with AI-generated quizzes, exercises, and coding challenges with instant feedback.",
+    icon: <Lightbulb className="h-6 w-6 text-purple-600 dark:text-purple-400" />,
+  },
+  {
+    title: "Export & Integration",
+    description:
+      "Download your courses as PDFs, interactive HTML pages, or SCORM modules for integration with learning management systems.",
+    icon: <BookOpen className="h-6 w-6 text-purple-600 dark:text-purple-400" />,
+  },
+]
+
+const steps = [
+  {
+    title: "Enter Your Topic",
+    description: "Specify the subject you want to learn about and your prior knowledge level.",
+  },
+  {
+    title: "AI Generates Content",
+    description: "Our Gemini-powered AI creates a structured course with modules and sections.",
+  },
+  {
+    title: "Learn Interactively",
+    description: "Progress through the course at your own pace with adaptive content and assessments.",
+  },
+]
+
