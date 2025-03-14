@@ -9,19 +9,21 @@ import { motion } from "framer-motion"
 import { useRouter, useSearchParams } from "next/navigation"
 import { signIn, useSession } from "next-auth/react"
 import { FcGoogle } from "react-icons/fc"
+import { validateLoginForm } from "@/lib/validation"
 
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const errorFromQuery = searchParams.get("error");
+  const emailFromQuery = searchParams.get("email") || "";
   
   const { data: session, status } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
+    email: emailFromQuery,
     password: "",
     rememberMe: false
   });
@@ -57,8 +59,14 @@ export default function LoginPage() {
     setError("");
     
     // Validate form
-    if (!formData.email || !formData.password) {
-      setError("Email and password are required");
+    const validationErrors = validateLoginForm(
+      formData.email, 
+      formData.password
+    );
+    
+    if (validationErrors) {
+      const firstError = Object.values(validationErrors)[0];
+      setError(firstError || "Please check your information");
       return;
     }
 

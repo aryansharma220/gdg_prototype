@@ -6,6 +6,8 @@ export async function POST(req: NextRequest) {
   try {
     const { name, email, password } = await req.json();
 
+    console.log("Registration attempt:", { name, email, hasPassword: !!password });
+
     // Basic validation
     if (!name || !email || !password) {
       return NextResponse.json(
@@ -42,6 +44,7 @@ export async function POST(req: NextRequest) {
     // Check if user already exists
     const existingUser = getUserByEmail(email);
     if (existingUser) {
+      console.log("Registration failed: Email already in use", email);
       return NextResponse.json(
         { error: "Email already in use" },
         { status: 409 }
@@ -50,9 +53,11 @@ export async function POST(req: NextRequest) {
 
     // Create new user
     const newUser = await createUser(name, email, password);
+    console.log("User registered successfully:", { id: newUser.id, email: newUser.email });
 
     // Return success without sensitive information
     return NextResponse.json({
+      success: true,
       id: newUser.id,
       name: newUser.name,
       email: newUser.email,

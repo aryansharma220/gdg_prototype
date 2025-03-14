@@ -9,6 +9,7 @@ import { motion } from "framer-motion"
 import { useRouter, useSearchParams } from "next/navigation"
 import { signIn, useSession } from "next-auth/react"
 import { FcGoogle } from "react-icons/fc"
+import { validateSignupForm } from "@/lib/validation"
 
 export default function SignupPage() {
   const router = useRouter();
@@ -45,19 +46,18 @@ export default function SignupPage() {
     e.preventDefault();
     setError("");
     
-    // Validate form
-    if (!formData.name || !formData.email || !formData.password) {
-      setError("All fields are required");
-      return;
-    }
+    // Validate form using our validation utilities
+    const validationErrors = validateSignupForm(
+      formData.name, 
+      formData.email, 
+      formData.password, 
+      formData.agreeTos
+    );
     
-    if (!formData.agreeTos) {
-      setError("You must agree to the Terms of Service and Privacy Policy");
-      return;
-    }
-
-    if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters");
+    if (validationErrors) {
+      // Display the first validation error we find
+      const firstError = Object.values(validationErrors)[0];
+      setError(firstError || "Please check your information");
       return;
     }
 
@@ -83,21 +83,25 @@ export default function SignupPage() {
       }
       
       // If registration successful, sign in with the new credentials
-      const result = await signIn('credentials', {
+      const loginResult = await signIn('credentials', {
         redirect: false,
         email: formData.email,
         password: formData.password,
-        callbackUrl
       });
 
-      if (result?.error) {
-        setError("Registration succeeded but login failed. Please go to the login page.");
-        setIsLoading(false);
+      if (loginResult?.error) {
+        console.error("Login after registration failed:", loginResult.error);
+        
+        // Instead of showing an error, indicate success and redirect to login
+        setSuccess(true);
+        setTimeout(() => {
+          router.push(`/login?email=${encodeURIComponent(formData.email)}`);
+        }, 1500);
         return;
       }
 
+      // If login succeeded, show success message and wait for session to trigger redirect
       setSuccess(true);
-      // Automatic redirect handled by the useEffect watching session
       
     } catch (err: any) {
       setError(err.message || "Something went wrong. Please try again.");

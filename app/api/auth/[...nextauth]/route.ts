@@ -2,7 +2,8 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
-import { authenticateUser } from "@/lib/users";
+import { getUserByEmail } from "@/lib/users";
+import { compare } from "bcryptjs";
 
 const handler = NextAuth({
   providers: [
@@ -18,13 +19,29 @@ const handler = NextAuth({
         }
 
         try {
-          // Authenticate user with the enhanced users module
-          const user = await authenticateUser(
-            credentials.email,
-            credentials.password
-          );
+          // Find user by email directly from users module
+          const user = getUserByEmail(credentials.email);
           
-          return user;
+          if (!user) {
+            console.log("User not found:", credentials.email);
+            return null;
+          }
+          
+          // Check password
+          const passwordMatch = await compare(credentials.password, user.password);
+          
+          if (!passwordMatch) {
+            console.log("Password doesn't match for:", credentials.email);
+            return null;
+          }
+          
+          // Return user data excluding password
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role || "user",
+          };
         } catch (error) {
           console.error("Authentication error:", error);
           return null;
